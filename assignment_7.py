@@ -61,7 +61,7 @@ output_csv_path = '/proj/applied_bioinformatics/users/x_daanw/MedBioinfo/analyse
 with open(output_csv_path, mode='w', newline='') as file:
     writer = csv.writer(file)
     writer.writerows(rows)
-
+conn.commit()
 rows = cursor.fetchall()
 for row in rows:
     print(row)
