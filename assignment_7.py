@@ -57,7 +57,7 @@ for row in rows:
 
 cursor.execute("select run_accession from sample_annot spl left join sample2bioinformatician s2b using(patient_code) where username='x_daanw';")
 rows = cursor.fetchall()
-output_csv_path = '/proj/applied_bioinformatics/users/x_daanw/MedBioinfo/analyses/x_daanw_run_accessions.txt'
+output_csv_path = '/proj/applied_bioinformatics/users/x_daanw/MedBioinfo/analyses/x_daanw_run_accessions_python_code.txt'
 with open(output_csv_path, mode='w', newline='') as file:
     writer = csv.writer(file)
     writer.writerows(rows)
