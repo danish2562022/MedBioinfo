@@ -8,11 +8,12 @@
 #SBATCH --time=02:30:00
 
 
-echo "Script start: download and initial sequencing read quality control"
+echo "Seqkit"
 date
+fastq_dir="./sra_fastq"
+accession="ERR6913102"
 
-srun --cpus-per-task=8 --time=02:30:00 singularity exec /proj/applied_bioinformatics/common_data/meta.sif seqkit -h
-srun --cpus-per-task=8 --time=02:30:00 singularity exec /proj/applied_bioinformatics/common_data/meta.sif seqkit stats -j 8 ./sra_fastq/*.fastq.gz
+srun --cpus-per-task=2 --time=02:30:00 singularity exec /proj/applied_bioinformatics/common_data/meta.sif xargs -I{} -a x_daanw_run_accessions.txt fastqc -t 2 --outdir=./fastqc "$fastq_dir/{}_1.fastq.gz" "$fastq_dir/{}_2.fastq.gz"
 
 
 

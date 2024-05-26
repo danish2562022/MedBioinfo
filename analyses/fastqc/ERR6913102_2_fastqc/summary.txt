@@ -1,0 +1,10 @@
+PASS	Basic Statistics	ERR6913102_2.fastq.gz
+PASS	Per base sequence quality	ERR6913102_2.fastq.gz
+PASS	Per sequence quality scores	ERR6913102_2.fastq.gz
+WARN	Per base sequence content	ERR6913102_2.fastq.gz
+PASS	Per sequence GC content	ERR6913102_2.fastq.gz
+PASS	Per base N content	ERR6913102_2.fastq.gz
+WARN	Sequence Length Distribution	ERR6913102_2.fastq.gz
+PASS	Sequence Duplication Levels	ERR6913102_2.fastq.gz
+PASS	Overrepresented sequences	ERR6913102_2.fastq.gz
+PASS	Adapter Content	ERR6913102_2.fastq.gz

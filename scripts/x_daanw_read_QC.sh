@@ -5,7 +5,7 @@
 #SBATCH --error=job_error.log
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
-#SBATCH --time=02:30:00ç
+#SBATCH --time=02:30:00
 
 echo "Script start: download and initial sequencing read quality control"
 date
@@ -25,6 +25,30 @@ mkdir -p fastq_output
 
 srun --cpus-per-task=8 --time=02:30:00 singularity exec /proj/applied_bioinformatics/common_data/meta.sif xargs -a x_daanw_run_accessions.txt fastq-dump --split-files --gzip --outdir ./sra_fastq/
 cp -r ./sra_fastq ../data/
+
+echo "Script start: download and initial sequencing read quality control"
+
+
+srun --cpus-per-task=8 --time=02:30:00 singularity exec /proj/applied_bioinformatics/common_data/meta.sif seqkit -h
+srun --cpus-per-task=8 --time=02:30:00 singularity exec /proj/applied_bioinformatics/common_data/meta.sif seqkit stats -j 8 ./sra_fastq/*.fastq.gz
+
+srun --cpus-per-task=8 --time=02:30:00 singularity exec /proj/applied_bioinformatics/common_data/meta.sif seqkit rmdup -j 8 ./sra_fastq/*.fastq.gz
+
+srun --cpus-per-task=8 --time=02:30:00 singularity exec /proj/applied_bioinformatics/common_data/meta.sif seqkit locate -j 8 -p 'AGATCGGAAGAGCACACGTCTGAACTCCAGTCA' -p 'AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT'  ./sra_fastq/*.fastq.gz
+srun --cpus-per-task=8 --time=02:30:00 singularity exec /proj/applied_bioinformatics/common_data/meta.sif seqkit locate -j 8 -p 'AGATCGGAAG' -p 'AGATCGGAAG' -p 'GATCGGAAGA' -p 'GATCGGAAGA' ./sra_fastq/*.fastq.gz
+
+srun --cpus-per-task=2 --time=02:30:00 singularity exec /proj/applied_bioinformatics/common_data/meta.sif fastqc -t 2 --outdir=./fastqc "$fastq_dir/${accession}_1.fastq.gz" "$fastq_dir/${accession}_2.fastq.gz"
+
+
+srun --cpus-per-task=2 --time=02:30:00 singularity exec /proj/applied_bioinformatics/common_data/meta.sif xargs -I{} -a x_daanw_run_accessions.txt fastqc -t 2 --outdir=./fastqc "$fastq_dir/{}_1.fastq.gz" "$fastq_dir/{}_2.fastq.gz"
+
+fastq_dir="./sra_fastq"
+accession="ERR6913102"
+
+srun --cpus-per-task=2 --time=02:30:00 singularity exec /proj/applied_bioinformatics/common_data/meta.sif xargs -I{} -a x_daanw_run_accessions.txt fastqc -t 2 --outdir=./fastqc "$fastq_dir/{}_1.fastq.gz" "$fastq_dir/{}_2.fastq.gz"
+
+
+# scp x_daanw@tetralith.nsc.liu.se:/proj/applied_bioinformatics/users/x_daanw/MedBioinfo/scripts/fastqc/\*.html .
 # Log the end of the script
 echo "Script end"
 date 
